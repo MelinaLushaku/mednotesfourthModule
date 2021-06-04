@@ -8,6 +8,8 @@ import com.example.mednotes4.OutputAdapters.SystemManagementModuleServ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConversationService implements IConversationService{
 
@@ -37,6 +39,12 @@ public class ConversationService implements IConversationService{
     @Override
     public void addNewConverationP(Conversation c){
         this.conversationRepository.save(c);
+    }
+
+    @Override
+    public List<Conversation> listaBisedes(int doc , int pat){
+        List<Conversation>lista = this.conversationRepository.findConvByUsers(doc , pat);
+        return lista;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.mednotes4.Model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -8,7 +9,7 @@ public class DoctorEntity {
     private String doctorName;
     private String doctorSurname;
 
-
+   // @Column(name="doctorPersonalNumber")
     private int doctorPersonalNumber;
 
     public DoctorEntity() {

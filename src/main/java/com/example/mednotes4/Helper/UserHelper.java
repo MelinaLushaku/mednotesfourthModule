@@ -7,12 +7,17 @@ public class UserHelper implements Serializable {
     private String name;
     private String surname;
 
+
    public UserHelper(){}
     public UserHelper(String name, String surname) {
         this.name = name;
         this.surname = surname;
 
     }
+
+
+
+
 
     public String getName() {
         return name;

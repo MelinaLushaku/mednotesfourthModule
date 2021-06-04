@@ -1,6 +1,7 @@
 package com.example.mednotes4.OutputAdapters;
 
 import com.example.mednotes4.Helper.UserHelper;
+import com.example.mednotes4.Helper.UserHelper2;
 import com.example.mednotes4.Model.DoctorEntity;
 import com.example.mednotes4.Model.PatientEntity;
 import org.springframework.http.*;
@@ -36,9 +37,9 @@ public class SystemManagementModuleServ {
     public DoctorEntity doctoriE(int doctorPersonalNumber){
         RestTemplate restTemplate = new RestTemplate();
         String userServiceUrl="http://localhost:8080/api/systemManagement/admin/DoctortByPersonal/"+doctorPersonalNumber;
-        ResponseEntity<UserHelper> responseEntity = restTemplate.getForEntity(userServiceUrl , UserHelper.class );
-        String emri = responseEntity.getBody().getName();
-        String mbiemri = responseEntity.getBody().getSurname();
+        ResponseEntity<UserHelper2> responseEntity = restTemplate.getForEntity(userServiceUrl , UserHelper2.class );
+        String emri = responseEntity.getBody().getDoctorName();
+        String mbiemri = responseEntity.getBody().getDoctorSurname();
         int nrpersonal3 = doctorPersonalNumber;
 
         return new DoctorEntity(emri,mbiemri,nrpersonal3);

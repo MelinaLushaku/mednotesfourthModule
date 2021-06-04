@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/conversationManagement")
 public class ConversationModuleController {
@@ -32,5 +34,16 @@ public class ConversationModuleController {
         return ResponseEntity.ok("ConversationAdded");
 
     }
+
+    @GetMapping("/allConversation/{docNumber}/{patNumber}")
+    public ResponseEntity getConversationsByUser(@PathVariable int docNumber , @PathVariable int patNumber){
+        List<Conversation> list = this.iConversationService.listaBisedes(docNumber , patNumber);
+        if(list.size() !=0){
+            return ResponseEntity.ok(list);
+        }
+        return ResponseEntity.ok("You havent talked before");
+
+    }
+
 
 }
