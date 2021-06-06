@@ -6,8 +6,11 @@ import com.example.mednotes4.Model.DoctorEntity;
 import com.example.mednotes4.Model.PatientEntity;
 import com.example.mednotes4.OutputAdapters.SystemManagementModuleServ;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,5 +49,74 @@ public class ConversationService implements IConversationService{
         List<Conversation>lista = this.conversationRepository.findConvByUsers(doc , pat);
         return lista;
     }
+    @Override
+    public ResponseEntity deleteConvForPat(int doc){
+        List<Conversation> lista = this.conversationRepository.findConvByDoc(doc);
+        if(lista.size() != 0){
+        for(int i = 0 ; i<lista.size() ; i++) {
+            this.conversationRepository.delete(lista.get(i));
+            return ResponseEntity.ok("Conversation Deleted");
+        }
+        }
+            return ResponseEntity.ok("This conversation doesn't exists!");
 
+    }
+    @Override
+    public ResponseEntity deleteConvForDoc(int pat){
+        List<Conversation> lista = this.conversationRepository.findConvByPat(pat);
+        if(lista.size() != 0){
+        for(int i = 0 ; i<lista.size() ; i++) {
+            this.conversationRepository.delete(lista.get(i));
+            return ResponseEntity.ok("Conversation Deleted");
+        }
+        }
+            return ResponseEntity.ok("This conversation doesn't exists!");
+
+    }
+
+    @Override
+    public List<PatientEntity> listaEBisedaveDoctor(int docNumber){
+        List <Conversation> lista = this.conversationRepository.findConvByDoc(docNumber);
+        if(lista.size() != 0){
+            List <PatientEntity>pacientat = new ArrayList<PatientEntity>();
+            for (int i = 0 ; i < lista.size() ; i++){
+                PatientEntity pe = lista.get(i).getPatientEntity();
+                if (pacientat.size() !=0) {
+                    for (int j = 0; j < pacientat.size(); j++) {
+                        if (pe.getPersonalNumber() != pacientat.get(j).getPersonalNumber()) {
+                            pacientat.add(pe);
+                        }
+                    }
+                }
+                else{
+                        pacientat.add(pe);
+                    }
+            }
+            return pacientat;
+        }
+          return null;
+    }
+     @Override
+     public List<DoctorEntity> listaEBisedavePatient(int patNumber){
+         List <Conversation> lista = this.conversationRepository.findConvByPat(patNumber);
+         if(lista.size() != 0){
+             List <DoctorEntity>mjeket = new ArrayList<DoctorEntity>();
+             for (int i = 0 ; i < lista.size() ; i++){
+                 DoctorEntity pe = lista.get(i).getDoctorEntity();
+                 if (mjeket.size() !=0) {
+                     for (int j = 0; j < mjeket.size(); j++) {
+
+                         if (pe.getDoctorPersonalNumber() != mjeket.get(j).getDoctorPersonalNumber()) {
+                             mjeket.add(pe);
+                         }
+                     }
+                 }
+                 else{
+                     mjeket.add(pe);
+                 }
+             }
+             return mjeket;
+         }
+         return null;
+     }
 }

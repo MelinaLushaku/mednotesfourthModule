@@ -44,6 +44,37 @@ public class ConversationModuleController {
         return ResponseEntity.ok("You havent talked before");
 
     }
+    @PostMapping("/deleteConvPat/{docNumber}")
+    public ResponseEntity patientDeleteConv(@PathVariable int docNumber){
+       ResponseEntity re = this.iConversationService.deleteConvForPat(docNumber);
+        return  re;
+    }
+    @PostMapping("/deleteConvDoc/{patNumber}")
+    public ResponseEntity doctorDeleteConv(@PathVariable int patNumber){
+       ResponseEntity re = this.iConversationService.deleteConvForDoc(patNumber);
+        return  re;
+    }
+
+
+    @GetMapping("conversationListDoctor/{docNumber}")
+    public ResponseEntity docList(@PathVariable int docNumber){
+        List<PatientEntity> lista = this.iConversationService.listaEBisedaveDoctor(docNumber);
+        if(lista == null){
+            return  ResponseEntity.ok("You don't have a list of conversations");
+        }else {
+            return ResponseEntity.ok(lista);
+        }
+    }
+
+    @GetMapping("conversationListPatient/{patNumber}")
+    public ResponseEntity patList(@PathVariable int patNumber){
+        List<DoctorEntity> lista = this.iConversationService.listaEBisedavePatient(patNumber);
+        if(lista == null){
+            return  ResponseEntity.ok("You don't have a list of conversations");
+        }else {
+            return ResponseEntity.ok(lista);
+        }
+    }
 
 
 }
