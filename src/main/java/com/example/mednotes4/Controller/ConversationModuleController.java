@@ -1,5 +1,6 @@
 package com.example.mednotes4.Controller;
 
+import com.example.mednotes4.Helper.ConversationResponse;
 import com.example.mednotes4.Model.Conversation;
 import com.example.mednotes4.Model.DoctorEntity;
 import com.example.mednotes4.Model.PatientEntity;
@@ -24,24 +25,24 @@ public class ConversationModuleController {
 
     }
 
-    @PostMapping("/addNewConversation/{personalNumber}/{doctorPersonalNumber}/{fjaliaBisedes}")
-    public ResponseEntity addNewConversationPatient(@PathVariable int personalNumber, @PathVariable int doctorPersonalNumber , @PathVariable String fjaliaBisedes){
+    @PostMapping("/addNewConversation/{personalNumber}/{doctorPersonalNumber}/{fjaliaBisedes}/{roli}")
+    public ResponseEntity addNewConversationPatient(@PathVariable int personalNumber, @PathVariable int doctorPersonalNumber , @PathVariable String fjaliaBisedes , @PathVariable int roli){
         PatientEntity pE =this.iConversationService.pacientiE(personalNumber);
         DoctorEntity dE = this.iConversationService.doctorE(doctorPersonalNumber);
 
-        Conversation c = new Conversation(fjaliaBisedes , pE , dE);
+        Conversation c = new Conversation(fjaliaBisedes , pE , dE, roli);
         this.iConversationService.addNewConverationP(c);
         return ResponseEntity.ok("ConversationAdded");
 
     }
 
     @GetMapping("/allConversation/{docNumber}/{patNumber}")
-    public ResponseEntity getConversationsByUser(@PathVariable int docNumber , @PathVariable int patNumber){
+    public ConversationResponse getConversationsByUser(@PathVariable int docNumber , @PathVariable int patNumber){
         List<Conversation> list = this.iConversationService.listaBisedes(docNumber , patNumber);
         if(list.size() !=0){
-            return ResponseEntity.ok(list);
+            return new ConversationResponse.ConversationResponseBuilder<>(201).setMesazhin("List e sukseshme").setData(list).build();
         }
-        return ResponseEntity.ok("You havent talked before");
+        return new ConversationResponse.ConversationResponseBuilder<>(401).setErrorin("There is no conversation!").build();
 
     }
     @PostMapping("/deleteConvPat/{docNumber}")
@@ -67,12 +68,12 @@ public class ConversationModuleController {
     }
 
     @GetMapping("conversationListPatient/{patNumber}")
-    public ResponseEntity patList(@PathVariable int patNumber){
+    public ConversationResponse patList(@PathVariable int patNumber){
         List<DoctorEntity> lista = this.iConversationService.listaEBisedavePatient(patNumber);
-        if(lista == null){
-            return  ResponseEntity.ok("You don't have a list of conversations");
+        if(lista != null){
+            return new ConversationResponse.ConversationResponseBuilder<>(201).setMesazhin("List e suksseshme").setData(lista).build();
         }else {
-            return ResponseEntity.ok(lista);
+            return new ConversationResponse.ConversationResponseBuilder<>(401).setErrorin("There is no conversation!").build();
         }
     }
 

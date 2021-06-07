@@ -14,22 +14,27 @@ public class Conversation {
     @Column
     private String conversationDes;
 
+
     @Embedded
     private PatientEntity patientEntity;
 
     @Embedded
     private DoctorEntity doctorEntity;
 
+    @Column
+    private int role;
+
 
 
 
     public Conversation(){}
 
-    public Conversation( String conversationDes, PatientEntity patientEntity, DoctorEntity doctorEntity) {
+    public Conversation( String conversationDes, PatientEntity patientEntity, DoctorEntity doctorEntity,int role) {
 
         this.conversationDes = conversationDes;
         this.patientEntity = patientEntity;
         this.doctorEntity = doctorEntity;
+        this.role = role;
 
     }
 
@@ -67,5 +72,13 @@ public class Conversation {
 
     public void setDoctorEntity(DoctorEntity doctorEntity) {
         this.doctorEntity = doctorEntity;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }
