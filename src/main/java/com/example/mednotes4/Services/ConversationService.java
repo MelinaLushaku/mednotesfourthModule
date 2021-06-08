@@ -50,15 +50,17 @@ public class ConversationService implements IConversationService{
         return lista;
     }
     @Override
-    public ResponseEntity deleteConvForPat(int doc){
-        List<Conversation> lista = this.conversationRepository.findConvByDoc(doc);
+    public void deleteConvForPat(int doc , int pat){
+        List<Conversation> lista = this.conversationRepository.deleteConvBy(doc, pat);
+
         if(lista.size() != 0){
-        for(int i = 0 ; i<lista.size() ; i++) {
+        /*for(int i = 0 ; i<lista.size() ; i++) {
             this.conversationRepository.delete(lista.get(i));
-            return ResponseEntity.ok("Conversation Deleted");
+
+        }*/
+            this.conversationRepository.deleteInBatch(lista);
         }
-        }
-            return ResponseEntity.ok("This conversation doesn't exists!");
+
 
     }
     @Override

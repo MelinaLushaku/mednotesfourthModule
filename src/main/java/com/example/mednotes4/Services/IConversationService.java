@@ -13,7 +13,7 @@ public interface IConversationService {
     DoctorEntity doctorE(int doctorPersonalNumber);
     void addNewConverationP(Conversation c);
     List<Conversation> listaBisedes(int doc , int pat);
-    ResponseEntity deleteConvForPat(int doc);
+    void deleteConvForPat(int doc , int pat);
     ResponseEntity deleteConvForDoc(int pat);
     List<PatientEntity> listaEBisedaveDoctor(int docNumber);
     List<DoctorEntity> listaEBisedavePatient(int patNumber);

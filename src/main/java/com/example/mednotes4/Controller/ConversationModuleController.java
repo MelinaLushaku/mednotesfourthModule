@@ -26,13 +26,13 @@ public class ConversationModuleController {
     }
 
     @PostMapping("/addNewConversation/{personalNumber}/{doctorPersonalNumber}/{fjaliaBisedes}/{roli}")
-    public ResponseEntity addNewConversationPatient(@PathVariable int personalNumber, @PathVariable int doctorPersonalNumber , @PathVariable String fjaliaBisedes , @PathVariable int roli){
+    public ConversationResponse addNewConversationPatient(@PathVariable int personalNumber, @PathVariable int doctorPersonalNumber , @PathVariable String fjaliaBisedes , @PathVariable int roli){
         PatientEntity pE =this.iConversationService.pacientiE(personalNumber);
         DoctorEntity dE = this.iConversationService.doctorE(doctorPersonalNumber);
 
         Conversation c = new Conversation(fjaliaBisedes , pE , dE, roli);
         this.iConversationService.addNewConverationP(c);
-        return ResponseEntity.ok("ConversationAdded");
+        return new ConversationResponse.ConversationResponseBuilder<>(201).setMesazhin("Conversation added").setData(c).build();
 
     }
 
@@ -45,16 +45,16 @@ public class ConversationModuleController {
         return new ConversationResponse.ConversationResponseBuilder<>(401).setErrorin("There is no conversation!").build();
 
     }
-    @PostMapping("/deleteConvPat/{docNumber}")
-    public ResponseEntity patientDeleteConv(@PathVariable int docNumber){
-       ResponseEntity re = this.iConversationService.deleteConvForPat(docNumber);
-        return  re;
+    @PostMapping("/deleteConvPat/{docNumber}/{patNumber}")
+    public ConversationResponse patientDeleteConv(@PathVariable int docNumber, @PathVariable int patNumber){
+        this.iConversationService.deleteConvForPat(docNumber,patNumber);
+        return new ConversationResponse.ConversationResponseBuilder<>(401).setMesazhin("Deleted Succesfully").build();
     }
-    @PostMapping("/deleteConvDoc/{patNumber}")
+   /* @PostMapping("/deleteConvDoc/{patNumber}")
     public ResponseEntity doctorDeleteConv(@PathVariable int patNumber){
        ResponseEntity re = this.iConversationService.deleteConvForDoc(patNumber);
         return  re;
-    }
+    }*/
 
 
     @GetMapping("conversationListDoctor/{docNumber}")
