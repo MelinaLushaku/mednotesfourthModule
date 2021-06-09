@@ -58,12 +58,12 @@ public class ConversationModuleController {
 
 
     @GetMapping("conversationListDoctor/{docNumber}")
-    public ResponseEntity docList(@PathVariable int docNumber){
+    public ConversationResponse docList(@PathVariable int docNumber){
         List<PatientEntity> lista = this.iConversationService.listaEBisedaveDoctor(docNumber);
-        if(lista == null){
-            return  ResponseEntity.ok("You don't have a list of conversations");
+        if(lista != null){
+            return new ConversationResponse.ConversationResponseBuilder<>(201).setMesazhin("List e suksseshme").setData(lista).build();
         }else {
-            return ResponseEntity.ok(lista);
+            return new ConversationResponse.ConversationResponseBuilder<>(401).setErrorin("There is no conversation!").build();
         }
     }
 
