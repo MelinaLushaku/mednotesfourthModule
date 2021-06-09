@@ -80,24 +80,26 @@ public class ConversationService implements IConversationService{
     public List<PatientEntity> listaEBisedaveDoctor(int docNumber){
         List <Conversation> lista = this.conversationRepository.findConvByDoc(docNumber);
         if(lista.size() != 0){
-            List <PatientEntity>pacientat = new ArrayList<PatientEntity>();
+            List <PatientEntity>mjeket = new ArrayList<PatientEntity>();
             for (int i = 0 ; i < lista.size() ; i++){
                 PatientEntity pe = lista.get(i).getPatientEntity();
-                if (pacientat.size() !=0) {
-                    for (int j = 0; j < pacientat.size(); j++) {
-                        if (pe.getPersonalNumber() != pacientat.get(j).getPersonalNumber()) {
-                            pacientat.add(pe);
+                if (mjeket.size() !=0) {
+                    for (int j = 0; j < mjeket.size(); j++) {
+
+                        if (pe.getPersonalNumber() != mjeket.get(j).getPersonalNumber()) {
+                            mjeket.add(pe);
                         }
                     }
                 }
                 else{
-                        pacientat.add(pe);
-                    }
+                    mjeket.add(pe);
+                }
             }
-            return pacientat;
+            return mjeket;
         }
-          return null;
+        return null;
     }
+
      @Override
      public List<DoctorEntity> listaEBisedavePatient(int patNumber){
          List <Conversation> lista = this.conversationRepository.findConvByPat(patNumber);
