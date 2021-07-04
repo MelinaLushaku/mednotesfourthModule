@@ -8,6 +8,7 @@ import com.example.mednotes4.OutputAdapters.SystemManagementModuleServ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class ConversationService implements IConversationService{
             return ResponseEntity.ok("This conversation doesn't exists!");
 
     }
-
+/*
     @Override
     public List<PatientEntity> listaEBisedaveDoctor(int docNumber){
         List <Conversation> lista = this.conversationRepository.findConvByDoc(docNumber);
@@ -98,7 +99,30 @@ public class ConversationService implements IConversationService{
             return mjeket;
         }
         return null;
+    }*/
+@Override
+public List<PatientEntity> listaEBisedaveDoctor(int patNumber){
+    List <Conversation> lista = this.conversationRepository.findConvByDoc(patNumber);
+    if(lista.size() != 0){
+        List <PatientEntity> mjeket2 = new ArrayList<PatientEntity>();
+        for (int i = 0 ; i < lista.size() ; i++){
+            PatientEntity pe = lista.get(i).getPatientEntity();
+            if (mjeket2.size() !=0) {
+                for (int j = 0; j < mjeket2.size(); j++) {
+
+                    if (pe.getPersonalNumber() != mjeket2.get(j).getPersonalNumber()) {
+                        mjeket2.add(pe);
+                    }
+                }
+            }
+            else{
+                mjeket2.add(pe);
+            }
+        }
+        return mjeket2;
     }
+    return null;
+}
 
      @Override
      public List<DoctorEntity> listaEBisedavePatient(int patNumber){
